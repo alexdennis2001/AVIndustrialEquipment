@@ -1,0 +1,27 @@
+.header-logos {
+    background-color: #000000; 
+}
+
+.header-text h1{
+    font-family: fantasy;
+    font-size: 3rem;
+    margin: 0;
+    text-transform: uppercase;
+    text-align: right;
+}
+
+.img-container{
+    float: right;
+}
+
+.custom-navbar {
+    background-color: #958452; 
+}
+
+/* Custom style for NavDropdown */
+.custom-navbar .nav-link,
+.custom-navbar .dropdown-menu {
+  color: #ffffff; 
+}
+
+

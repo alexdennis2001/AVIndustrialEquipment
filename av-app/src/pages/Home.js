@@ -1,17 +1,9 @@
-import { Link } from 'react-router-dom';
-
-// Import components
-import Header from '../components/Header';
+import Header from '../components/Header/Header';
 
 function Home() {
-    return (
-      <div>
-        <Header />
-        <h1>Home Page</h1>
-        <p>This is the home page content.</p>
-      </div>
-    );
-  }
-  
-  export default Home;
-  
+  return (
+    <Header />
+  );
+}
+
+export default Home;
