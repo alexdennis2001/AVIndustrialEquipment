@@ -1,0 +1,11 @@
+.main-container {
+    background-color: #EFEFEF;
+    height: 77.3vh;
+}
+
+.card-container {
+    background-color: #E4DFCB;
+    text-align: justify;
+    border-radius: 10px;
+    padding: 20px;
+}
