@@ -1,4 +1,4 @@
-import { Container, Stack } from 'react-bootstrap';
+import { Container } from 'react-bootstrap';
 import Header from '../components/Header/Header';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
@@ -9,10 +9,10 @@ function About() {
   return (
     <div>
       <Header/>
-      <Container fluid className='main-container pt-5'>
+      <Container fluid className='main-container pt-1'>
         <Row className="text-center">
           <h2>About Us</h2>
-          <h1>AV INDUSTRIAL EQUIPMENT</h1>
+          <h1 style={{ fontFamily: 'fantasy'}}>AV INDUSTRIAL EQUIPMENT</h1>
         </Row>
         <Row className='justify-content-center'>
           <Container>

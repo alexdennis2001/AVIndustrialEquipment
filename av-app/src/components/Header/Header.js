@@ -12,24 +12,24 @@ function Header() {
       <Row className="header-logos text-white align-items-center text-center">
         <Col>
           <Container className='d-flex align-items-center'>
-              <TelephoneInboundFill color="white" size={28} />
-              <h3 className="ms-3 mb-0">915-258-2916</h3>
+              <TelephoneInboundFill color="white" size={24} />
+              <h5 className="ms-3 mb-0">915-258-2916</h5>
           </Container>
         </Col>
 
         <Col xs={6}>
           <Container className='d-flex align-items-center justify-content-center gap-3'>
-            <img src={AVLogo} alt="AV Logo" />
+            <img src={AVLogo} height={80} alt="AV Logo" />
             <div className='header-text'>
-              <h1>Industrial</h1>
-              <h1 style={{ color: '#DAB85A' }}>Equipment</h1>
+              <h1 style={{fontSize:"2rem"}}>Industrial</h1>
+              <h1 style={{ fontSize:"2rem", color: '#DAB85A' }}>Equipment</h1>
             </div>
           </Container>
         </Col>
 
         <Col>
           <div className='img-container pe-3'>
-            <img src={ValaSportsLogo} alt="Vala Sports Logo" />
+            <img src={ValaSportsLogo} height={80} alt="Vala Sports Logo" />
           </div>
         </Col>
 
