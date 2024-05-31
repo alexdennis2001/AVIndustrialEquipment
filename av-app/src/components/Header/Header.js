@@ -18,13 +18,15 @@ function Header() {
         </Col>
 
         <Col xs={6}>
-          <Container className='d-flex align-items-center justify-content-center gap-3'>
-            <img src={AVLogo} height={80} alt="AV Logo" />
-            <div className='header-text'>
-              <h1 style={{fontSize:"2rem"}}>Industrial</h1>
-              <h1 style={{ fontSize:"2rem", color: '#DAB85A' }}>Equipment</h1>
-            </div>
-          </Container>
+            <Container className='d-flex align-items-center justify-content-center'>
+              <Link to="/" className='d-flex gap-3' style={{ textDecoration: 'none' }}>
+                  <img src={AVLogo} height={80} alt="AV Logo" />
+                  <div className='header-text'>
+                    <h1 style={{fontSize:"2rem", color: '#FFFFFF'}}>Industrial</h1>
+                    <h1 style={{ fontSize:"2rem", color: '#DAB85A' }}>Equipment</h1>
+                  </div>
+              </Link>
+            </Container>
         </Col>
 
         <Col>
@@ -40,10 +42,10 @@ function Header() {
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="me-auto mx-auto">
             <NavDropdown title="INVENTORY" id="basic-nav-dropdown" >
-              <Link to="action/3.1" className="dropdown-item">Browse by Type</Link>
-              <Link to="action/3.2" className="dropdown-item">Browse by Brand</Link>
+              <Link to="/inventory/byType" className="dropdown-item">Browse by Type</Link>
+              <Link to="/inventory/byBrand" className="dropdown-item">Browse by Brand</Link>
               <NavDropdown.Divider />
-              <Link to="action/3.3" className="dropdown-item">View All</Link>
+              <Link to="/inventory/viewAll" className="dropdown-item">View All</Link>
               </NavDropdown>  
               <Nav.Link as={Link} to="/about" className='text-uppercase'>About</Nav.Link>
               <Nav.Link as={Link} to="/contact" className='text-uppercase'>Contact</Nav.Link>
