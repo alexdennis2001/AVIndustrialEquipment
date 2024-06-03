@@ -9,6 +9,7 @@ import Contact from './pages/Contact';
 import ViewAll from './pages/Inventory/ViewAll';
 import ByBrand from './pages/Inventory/ByBrand';
 import ByType from './pages/Inventory/ByType';
+import ProductDetails from './pages/ProductDetails';
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
         <Route path="/inventory/viewall" element={<ViewAll />} />
         <Route path="/inventory/byBrand" element={<ByBrand />} />
         <Route path="/inventory/byType" element={<ByType />} />
+        <Route path="/inventory/details/:id" element={<ProductDetails />} />
       </Routes>
     </Router>
   );

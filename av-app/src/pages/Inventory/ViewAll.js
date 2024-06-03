@@ -2,12 +2,14 @@ import React, { useState, useEffect } from 'react';
 import { Container, Row, Col, Card, Pagination, Button } from 'react-bootstrap';
 import Header from '../../components/Header/Header';
 import api from '../../api/axiosConfig';
+import { Link } from 'react-router-dom';
 
 function ViewAll() {
   const [data, setData] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
-  const pageSize = 240; // Adjust as needed for performance
+  const [isLoading, setIsLoading] = useState(false);
+  const pageSize = 240;
 
   useEffect(() => {
     fetchData();
@@ -20,18 +22,24 @@ function ViewAll() {
   }, [data]);
 
   const fetchData = () => {
+    setIsLoading(true);
     api.get(`/api/Products/all`)
       .then(response => {
         setData(response.data);
+        setIsLoading(false);
         console.log('Total items:', response.data.length);
       })
       .catch(error => {
         console.error('Error fetching data:', error);
+        setIsLoading(false);
       });
   };
 
   const handlePageChange = (pageNumber) => {
+    setIsLoading(true);  // Set loading true to trigger loading state
+    window.scrollTo(0, 0);  // Scroll to the top of the page
     setCurrentPage(pageNumber);
+    setIsLoading(false);  // Set loading false once the page number has been set
   };
 
   // Calculate the current page slice
@@ -41,8 +49,7 @@ function ViewAll() {
     <div>
       <Header/>
       <Container fluid className='main-container pt-2'>
-        <h1>View All</h1>
-        {currentData.length > 0 ? (
+        {isLoading ? <p>Loading...</p> : (
           <Row xs={1} sm={2} md={3} lg={4} className="g-4">
             {currentData.map((item, idx) => (
               <Col key={idx}>
@@ -54,17 +61,17 @@ function ViewAll() {
                     <Card.Text as={'h6'}><b>Type: </b>{item.type}</Card.Text>
                   </Card.Body>
                   <Card.Footer >
-                    <Row className='g-3'>
-                    <Button variant="success">MAKE AN OFFER</Button>
-                    <Button variant="outline-warning" style={{color: 'black'}}>Request Quote</Button>
-                    <Button variant="primary">View Details</Button>
+                    <Row className='g-2'>
+                      <Button variant="success">MAKE AN OFFER</Button>
+                      <Button variant="outline-warning" style={{color: 'black'}}>Request Quote</Button>
+                      <Button as={Link} to={`/inventory/details/${item.stock_num}`} variant="primary">View Details</Button>
                     </Row>
                   </Card.Footer>
                 </Card>
               </Col>
             ))}
           </Row>
-        ) : <p>Loading data...</p>}
+        )}
 
         <Pagination className="justify-content-center py-3">
           <Pagination.First onClick={() => handlePageChange(1)} disabled={currentPage === 1} />
