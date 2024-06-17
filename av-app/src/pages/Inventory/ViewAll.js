@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { Container, Row, Col, Card, Pagination, Button } from 'react-bootstrap';
+import { Container, Row, Col, Card, Pagination, Button, Spinner } from 'react-bootstrap';
+import Offcanvas from 'react-bootstrap/Offcanvas';
 import Header from '../../components/Header/Header';
 import api from '../../api/axiosConfig';
 import { Link } from 'react-router-dom';
@@ -9,7 +10,11 @@ function ViewAll() {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
-  const pageSize = 240;
+  const pageSize = 256;
+
+  const [show, setShow] = useState(false);
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
 
   useEffect(() => {
     fetchData();
@@ -36,10 +41,8 @@ function ViewAll() {
   };
 
   const handlePageChange = (pageNumber) => {
-    setIsLoading(true);  // Set loading true to trigger loading state
-    window.scrollTo(0, 0);  // Scroll to the top of the page
     setCurrentPage(pageNumber);
-    setIsLoading(false);  // Set loading false once the page number has been set
+    window.scrollTo(0, 0);  // Scroll to the top of the page
   };
 
   // Calculate the current page slice
@@ -49,7 +52,10 @@ function ViewAll() {
     <div>
       <Header/>
       <Container fluid className='main-container pt-2'>
-        {isLoading ? <p>Loading...</p> : (
+        {isLoading ?
+        <Container className='text-center p-5'>
+          <Spinner animation="border" variant="primary" role="status" style={{width: 50, height: 50}}/>
+        </Container> : (
           <Row xs={1} sm={2} md={3} lg={4} className="g-4">
             {currentData.map((item, idx) => (
               <Col key={idx}>
@@ -64,8 +70,9 @@ function ViewAll() {
                     <Row className='g-2'>
                       <Button variant="success">MAKE AN OFFER</Button>
                       <Button variant="outline-warning" style={{color: 'black'}}>Request Quote</Button>
-                      <Button as={Link} to={`/inventory/details/${item.stock_num}`} variant="primary">View Details</Button>
-                    </Row>
+                      <Button onClick={handleShow} variant="primary">View Details</Button>
+                    </Row> 
+                    {/* as={Link} to={`/inventory/details/${item.stock_num}`}  */}
                   </Card.Footer>
                 </Card>
               </Col>
@@ -73,7 +80,7 @@ function ViewAll() {
           </Row>
         )}
 
-        <Pagination className="justify-content-center py-3">
+        <Pagination className="justify-content-center pt-3">
           <Pagination.First onClick={() => handlePageChange(1)} disabled={currentPage === 1} />
           <Pagination.Prev onClick={() => handlePageChange(currentPage - 1)} disabled={currentPage === 1} />
           {[...Array(totalPages).keys()].map(page => 
@@ -88,6 +95,16 @@ function ViewAll() {
           <Pagination.Last onClick={() => handlePageChange(totalPages)} disabled={currentPage === totalPages} />
         </Pagination>
       </Container>
+
+      <Offcanvas show={show} onHide={handleClose} placement='end' style={{ width: '75%'}}>
+        <Offcanvas.Header closeButton>
+          <Offcanvas.Title>Offcanvas</Offcanvas.Title>
+        </Offcanvas.Header>
+        <Offcanvas.Body>
+          Some text as placeholder. In real life you can have the elements you
+          have chosen. Like, text, images, lists, etc.
+        </Offcanvas.Body>
+      </Offcanvas>
     </div>
   );
 }
