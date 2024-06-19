@@ -9,7 +9,7 @@ function About() {
   return (
     <div>
       <Header/>
-      <Container fluid className='main-container pt-1'>
+      <Container fluid className='main-container pt-1 pb-3'>
         <Row className="text-center">
           <h2>About Us</h2>
           <h1 style={{ fontFamily: 'fantasy'}}>AV INDUSTRIAL EQUIPMENT</h1>
