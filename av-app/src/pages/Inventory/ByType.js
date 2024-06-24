@@ -3,6 +3,7 @@ import { Container, Row, Col, Card, Button, Spinner, Form, Offcanvas, Image, Mod
 import Header from '../../components/Header/Header';
 import api from '../../api/axiosConfig';
 import ImagePlaceholder from '../../img/ImagePlaceHolder.png';
+import Footer from '../../components/Footer/Footer';
 
 
 const states = {
@@ -272,7 +273,9 @@ Stock number: ${product.stock_num}`;
 
       {type === "" ? (
          !isLoading ? (
-          <h6>Please select a type.</h6>
+          <div style={{height: '45vh'}}>
+            <h6>Please select a type.</h6>
+          </div>
         ) : (
           <Container className='text-center p-5'>
             <Spinner animation="border" variant="primary" role="status" style={{width: 50, height: 50}}/>
@@ -451,6 +454,7 @@ Stock number: ${product.stock_num}`;
           <Button variant="primary">Submit</Button>
         </Modal.Footer>
       </Modal>
+      <Footer />
     </div>
   );
 }

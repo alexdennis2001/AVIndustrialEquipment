@@ -2,7 +2,7 @@ import Header from '../components/Header/Header';
 import Button from 'react-bootstrap/Button';
 import { Container, Stack } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
-import './css/Home.css';
+
 
 function Home() {
   const navigate = useNavigate();

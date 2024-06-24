@@ -3,6 +3,7 @@ import { Container, Row, Col, Card, Pagination, Button, Spinner, Offcanvas, Moda
 import Header from '../../components/Header/Header';
 import api from '../../api/axiosConfig';
 import ImagePlaceholder from '../../img/ImagePlaceHolder.png';
+import Footer from '../../components/Footer/Footer';
 
 
 const states = {
@@ -110,9 +111,12 @@ Stock number: ${product.stock_num}`;
       <Header/>
       <Container fluid className='main-container pt-2'>
         {isLoading ?
-        <Container className='text-center p-5'>
+        <div style={{height: '45vh'}}>
+          <Container className='text-center p-5'>
           <Spinner animation="border" variant="primary" role="status" style={{width: 50, height: 50}}/>
-        </Container> : (
+        </Container>
+        </div>
+         : (
           <Row xs={1} sm={2} md={3} lg={4} className="g-4">
             {currentData.map((item, idx) => (
               <Col key={idx}>
@@ -299,6 +303,7 @@ Stock number: ${product.stock_num}`;
           <Button variant="primary">Submit</Button>
         </Modal.Footer>
       </Modal>
+      <Footer />
     </div>
   );
 }

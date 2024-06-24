@@ -9,27 +9,27 @@ import './Header.css';
 function Header() {
   return (
     <Container fluid>
-      <Row className="header-logos text-white align-items-center text-center">
-        <Col>
-          <Container className='d-flex align-items-center'>
+      <Row className="header-logos text-white align-items-center text-center pt-1">
+        <Col xs={4}>
+          <Container className='d-flex align-items-center cell-phone'>
               <TelephoneInboundFill color="white" size={24} />
               <h5 className="ms-3 mb-0">915-258-2916</h5>
           </Container>
         </Col>
 
-        <Col xs={6}>
+        <Col xs={4}>
             <Container className='d-flex align-items-center justify-content-center'>
               <Link to="/" className='d-flex gap-3' style={{ textDecoration: 'none' }}>
                   <img src={AVLogo} height={80} alt="AV Logo" />
                   <div className='header-text'>
-                    <h1 style={{fontSize:"2rem", color: '#FFFFFF'}}>Industrial</h1>
-                    <h1 style={{ fontSize:"2rem", color: '#DAB85A' }}>Equipment</h1>
+                    <h1 style={{color: '#FFFFFF'}}>Industrial</h1>
+                    <h1 style={{color: '#DAB85A' }}>Equipment</h1>
                   </div>
               </Link>
             </Container>
         </Col>
 
-        <Col>
+        <Col xs={4}>
           <div className='img-container pe-3'>
             <img src={ValaSportsLogo} height={80} alt="Vala Sports Logo" />
           </div>

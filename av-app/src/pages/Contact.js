@@ -5,15 +5,15 @@ import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import { EnvelopeFill, GeoFill, TelephoneFill  } from 'react-bootstrap-icons';
-
+import Footer from '../components/Footer/Footer';
 
 function Contact() {
     return (
       <div>
       <Header/>
-      <Container fluid className='main-container pt-2'>
+      <Container fluid className='main-container pt-2 pb-3'>
       <Row className="justify-content-md-center">
-        <Col xs lg="4" sm={8} className='pt-3'>
+        <Col xs lg="4" sm={8} className='p-3'>
           <h5 class="fw-bold">Get In Touch With Us!</h5>
           <Stack gap={5} className='pt-3'>
             <div>
@@ -57,7 +57,7 @@ function Contact() {
                 <Form.Label>Comment</Form.Label>
                 <Form.Control as="textarea" rows={3} />
               </Form.Group>
-              <div className="d-grid gap-2">
+              <div className="d-grid gap-2 pb-1">
                 <Button variant="secondary" type='submit' size="md">
                   Send
                 </Button>
@@ -69,6 +69,8 @@ function Contact() {
         </Col>
       </Row>
       </Container>
+      <Footer />
+
     </div>
     );
   }

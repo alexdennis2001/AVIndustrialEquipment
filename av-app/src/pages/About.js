@@ -3,16 +3,16 @@ import Header from '../components/Header/Header';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import AV_PP from '../img/AV_PP.png';
-import './css/About.css';
+import Footer from '../components/Footer/Footer';
 
 function About() {
   return (
     <div>
       <Header/>
       <Container fluid className='main-container pt-1 pb-3'>
-        <Row className="text-center">
+        <Row className="text-center logo-text">
           <h2>About Us</h2>
-          <h1 style={{ fontFamily: 'fantasy'}}>AV INDUSTRIAL EQUIPMENT</h1>
+          <h1>AV INDUSTRIAL EQUIPMENT</h1>
         </Row>
         <Row className='justify-content-center'>
           <Container>
@@ -20,12 +20,12 @@ function About() {
               <Col md="auto">
                 <Container className='card-container'>
                   <Row>
-                    <Col className='text-center'>
-                      <img src={AV_PP} alt="AV" />
+                    <Col xs={12} md={6} className='text-center'>
+                      <img src={AV_PP} alt="AV" className="img-fluid" />
                       <h3 className='pt-3 fw-bold'>Armando Valadez</h3>
                       <h6>Certified FIBA Agent</h6>
                     </Col>
-                    <Col className='me-5'>
+                    <Col xs={12} md={6}>
                       <p>
                         At <b>AV Industrial Equipment</b>, we bridge the machinery needs between the United States and Mexico, offering premium industrial machinery to enhance productivity and innovation. We specialize in offering a diverse range of machinery for metalworking, woodworking, plastics, and more, catering to various manufacturing industries. Our commitment extends beyond quality equipment; we prioritize customer satisfaction, ensuring each client finds the ideal machinery for their specific needs and budget.
                       </p>
@@ -43,6 +43,7 @@ function About() {
           </Container>
         </Row>
       </Container>
+      <Footer />
     </div>
   );
 }
