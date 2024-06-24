@@ -309,7 +309,7 @@ Stock number: ${product.stock_num}`;
         <Offcanvas.Body>
           {selectedProduct ? (
             <div>
-              <Container className='text-center'>
+              <Container className='text-center pb-3'>
                 <Image src={selectedProduct.image} className="img-fluid" style={{maxHeight: '300px', objectFit: 'cover'}}/>
               </Container>
               <Card>
