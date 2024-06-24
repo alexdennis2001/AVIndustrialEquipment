@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { Container, Row, Col, Card, Button, Spinner, Form, Offcanvas, Modal, Image } from 'react-bootstrap';
 import Header from '../../components/Header/Header';
 import api from '../../api/axiosConfig';
+import ImagePlaceholder from '../../img/ImagePlaceHolder.png';
+
 
 const states = {
   USA: [
@@ -116,7 +118,7 @@ Stock number: ${product.stock_num}`;
             {data.map((item, idx) => (
               <Col key={idx}>
                 <Card style={{ width: '18rem', height: '34rem' }}>
-                  <Card.Img variant="top" src={item.image} height={200} width={200}/>
+                  <Card.Img variant="top" src={item.image && item.image !== "NULL" ? item.image : ImagePlaceholder} height={200} width={200}/>
                   <Card.Body>
                     <Card.Title as={'h6'}>{item.title}</Card.Title>
                     <Card.Text as={'h6'}><b>Stock #</b> {item.stock_num}</Card.Text>
@@ -145,7 +147,7 @@ Stock number: ${product.stock_num}`;
           {selectedProduct ? (
             <div>
               <Container className='text-center pb-3'>
-                <Image src={selectedProduct.image} className="img-fluid" style={{maxHeight: '300px', objectFit: 'cover'}}/>
+                <Image src={selectedProduct.image && selectedProduct.image !== "NULL" ? selectedProduct.image : ImagePlaceholder} className="img-fluid" style={{maxHeight: '300px', objectFit: 'cover'}}/>
               </Container>
               <Card>
                 <Card.Body>
