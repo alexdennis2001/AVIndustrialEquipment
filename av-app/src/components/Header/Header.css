@@ -1,0 +1,39 @@
+.header-logos {
+    background-color: #000000; 
+}
+
+.header-text h1{
+    font-family: 'Gill Sans', fantasy;
+    font-size: 2rem;
+    margin: 0;
+    text-transform: uppercase;
+    text-align: right;
+}
+
+.img-container{
+    float: right;
+}
+
+.custom-navbar {
+    background-color: #958452; 
+}
+
+/* Custom style for NavDropdown */
+.custom-navbar .nav-link,
+.custom-navbar .dropdown-menu {
+  color: #ffffff; 
+}
+
+@media(max-width: 600px){
+   img {
+    height: 50px;
+   }
+   .header-text h1 {
+    font-size: 1rem;
+   }
+   .cell-phone h5{
+    font-size: 10px;
+   }
+}
+
+

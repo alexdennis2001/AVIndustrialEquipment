@@ -1,16 +1,27 @@
-import { Link } from 'react-router-dom';
+import Header from '../components/Header/Header';
+import Button from 'react-bootstrap/Button';
+import { Container, Stack } from 'react-bootstrap';
+import { useNavigate } from 'react-router-dom';
+
 
 function Home() {
-    return (
-      <div>
-        <h1>Home Page</h1>
-        <p>This is the home page content.</p>
-        <Link to="/about">Go to About</Link>
-        <br />
-        <Link to="/contact">Go to Contact</Link>
+  const navigate = useNavigate();
+  
+  return (
+    <div>
+      <Header/>
+      <div className="background-container">
+        <Container className='title-container'>
+          <h2>WELCOME TO</h2>
+          <h1>AV INDUSTRIAL EQUIPMENT</h1>
+          <Stack direction="horizontal" gap={5}>
+            <Button onClick={() => navigate('/inventory/byType')} variant="outline-light" size="lg" className='m'>Browse by Type</Button>{' '}
+            <Button onClick={() => navigate('/inventory/byBrand')} variant="outline-light" size="lg">Browse by Brand</Button>{' '}
+          </Stack>
+        </Container>
       </div>
-    );
-  }
-  
-  export default Home;
-  
+    </div>
+  );
+}
+
+export default Home;
