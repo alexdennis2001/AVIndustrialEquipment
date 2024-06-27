@@ -28,14 +28,14 @@ function Contact() {
               <EnvelopeFill color="black" size={28} />
               <h5>Email</h5>
             </Stack>
-              <h6 style={{marginLeft:"45px"}}>armandovaladez@outlook.com</h6>
+              <h6 style={{marginLeft:"45px"}}><a href="mailto:avindustrialequipment@outlook.com">avindustrialequipment@outlook.com</a></h6>
             </div>
             <div>
             <Stack direction="horizontal" gap={3}>
               <TelephoneFill color="black" size={28} />
               <h5>Phone</h5>
             </Stack>
-              <h6 style={{marginLeft:"45px"}}>915-258-2916</h6>
+              <h6 style={{marginLeft:"45px"}}>+1 (915) 258 2916</h6>
             </div>
           </Stack>
         </Col>

@@ -63,7 +63,7 @@ function ViewAll() {
       .then(response => {
         setData(response.data);
         setIsLoading(false);
-        console.log('Total items:', response.data.length);
+        // console.log('Total items:', response.data.length);
       })
       .catch(error => {
         console.error('Error fetching data:', error);
@@ -81,7 +81,7 @@ function ViewAll() {
       .then(response => {
         setSelectedProduct(response.data);
         setShowOffcanvas(true);
-        console.log(response.data);
+        // console.log(response.data);
       })
       .catch(error => {
         console.error('Error loading product details:', error);
