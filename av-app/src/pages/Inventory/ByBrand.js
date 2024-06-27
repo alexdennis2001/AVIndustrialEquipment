@@ -54,7 +54,7 @@ function ByBrand() {
       .then(response => {
         setData(response.data);
         setIsLoading(false);
-        console.log('Total items:', response.data.length);
+        // console.log('Total items:', response.data.length);
       })
       .catch(error => {
         console.error('Error fetching data:', error);
