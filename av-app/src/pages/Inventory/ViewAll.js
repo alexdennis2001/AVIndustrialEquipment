@@ -119,20 +119,20 @@ Stock number: ${product.stock_num}`;
          : (
           <Row xs={1} sm={2} md={3} lg={4} className="g-4">
             {currentData.map((item, idx) => (
-              <Col key={idx}>
-                <Card style={{ width: '18rem', height: '34rem' }}>
-                  <Card.Img variant="top" src={item.image && item.image !== "NULL" ? item.image : ImagePlaceholder} height={200} width={200}/>
+              <Col key={idx} style={{ textAlign: '-webkit-center' }}>
+                <Card className="card-responsive" style={{ width: '18rem', height: '34rem' }}>
+                  <Card.Img variant="top" src={item.image && item.image !== "NULL" ? item.image : ImagePlaceholder} className="card-img-responsive" height={200} width={200} />
                   <Card.Body>
                     <Card.Title as={'h6'}>{item.title}</Card.Title>
                     <Card.Text as={'h6'}><b>Stock #</b> {item.stock_num}</Card.Text>
                     <Card.Text as={'h6'}><b>Type: </b>{item.type}</Card.Text>
                   </Card.Body>
-                  <Card.Footer >
+                  <Card.Footer>
                     <Row className='g-2'>
                       <Button variant="success" onClick={() => handleShowModal(item, `I'd like to make an offer of:\n\n${predefinedMessage(item)}`, "Make an Offer")}>MAKE AN OFFER</Button>
-                      <Button variant="outline-warning" onClick={() => handleShowModal(item, predefinedMessage(item), "Request a Quote")} style={{color: 'black'}}>Request Quote</Button>
+                      <Button variant="outline-warning" onClick={() => handleShowModal(item, predefinedMessage(item), "Request a Quote")} style={{ color: 'black' }}>Request Quote</Button>
                       <Button onClick={() => handleShowOffcanvas(item.stock_num)} variant="primary">View Details</Button>
-                    </Row> 
+                    </Row>
                   </Card.Footer>
                 </Card>
               </Col>

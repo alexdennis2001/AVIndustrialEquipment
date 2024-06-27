@@ -40,3 +40,16 @@
 .logo-text h1 {
   font-family: 'Gill Sans', fantasy;
 }
+
+@media (max-width: 600px) {
+  .card-responsive {
+    width: auto !important;
+    height: auto !important;
+  }
+
+  .card-img-responsive {
+    height: 250px;
+    width: 250px;
+    align-self: center;
+  }
+}
