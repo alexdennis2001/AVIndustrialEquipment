@@ -36,6 +36,20 @@ function ByType() {
   const [modalMessage, setModalMessage] = useState("");
   const [modalTitle, setModalTitle] = useState("");
 
+  const [formData, setFormData] = useState({
+    firstName: '',
+    lastName: '',
+    phoneNumber: '',
+    email: '',
+    company: '',
+    streetAddress: '',
+    country: '',
+    state: '',
+    city: '',
+    zipCode: '',
+    message: ''
+  });
+
   const handleCloseOffcanvas = () => setShowOffcanvas(false);
   const handleCloseModal = () => setShowModal(false);
   const handleShowModal = (product, message, title) => {
@@ -78,13 +92,31 @@ function ByType() {
 
 Stock number: ${product.stock_num}`;
 
-  const [country, setCountry] = useState('');
   const [stateOptions, setStateOptions] = useState([]);
 
   const handleCountryChange = (event) => {
     const selectedCountry = event.target.value;
-    setCountry(selectedCountry);
+    setFormData({ ...formData, country: selectedCountry });
     setStateOptions(states[selectedCountry] || []);
+  };
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const updatedFormData = { ...formData, message: modalMessage };
+    try {
+      const response = await api.post('/api/Contact/send-email', updatedFormData);
+      console.log(response.data);
+      alert('Email sent successfully');
+      handleCloseModal();
+    } catch (error) {
+      console.error('Error sending email:', error);
+      alert('Failed to send email');
+    }
   };
 
   const types = [
@@ -294,10 +326,10 @@ Stock number: ${product.stock_num}`;
                   </Card.Body>
                   <Card.Footer >
                     <Row className='g-2'>
-                      <Button variant="success" onClick={() => handleShowModal(item, `I'd like to make an offer of:\n\n${predefinedMessage(item)}`, "Make an Offer")}>MAKE AN OFFER</Button>
+                      <Button variant="success" onClick={() => handleShowModal(item, `I'd like to make an offer of: $0.00\n\n${predefinedMessage(item)}`, "Make an Offer")}>MAKE AN OFFER</Button>
                       <Button variant="outline-warning" onClick={() => handleShowModal(item, predefinedMessage(item), "Request a Quote")} style={{color: 'black'}}>Request Quote</Button>
                       <Button onClick={() => handleShowOffcanvas(item.stock_num)} variant="primary">View Details</Button>
-                    </Row> 
+                    </Row>
                   </Card.Footer>
                 </Card>
               </Col>
@@ -339,7 +371,7 @@ Stock number: ${product.stock_num}`;
                 </Card.Body>
                 <Card.Footer>
                   <Row className='g-1'>
-                    <Button variant="success" onClick={() => handleShowModal(selectedProduct, `I'd like to make an offer of:\n\n${predefinedMessage(selectedProduct)}`, "Make an Offer")}>MAKE AN OFFER</Button>
+                    <Button variant="success" onClick={() => handleShowModal(selectedProduct, `I'd like to make an offer of: $0.00\n\n${predefinedMessage(selectedProduct)}`, "Make an Offer")}>MAKE AN OFFER</Button>
                     <Button variant="outline-warning" onClick={() => handleShowModal(selectedProduct, predefinedMessage(selectedProduct), "Request a Quote")} style={{color: 'black'}}>Request Quote</Button>
                   </Row>
                 </Card.Footer>
@@ -350,109 +382,115 @@ Stock number: ${product.stock_num}`;
       </Offcanvas>
 
       <Modal show={showModal} onHide={handleCloseModal}>
-        <Modal.Header closeButton>
-          <Modal.Title>{modalTitle}</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <Form>
-            <Row className='pb-3'>
-              <Col md={6}>
-                <Form.Group controlId="formFirstName">
-                  <Form.Label>First Name</Form.Label>
-                  <Form.Control type="text" placeholder="Enter your first name" />
-                </Form.Group>
-              </Col>
-              <Col md={6}>
-                <Form.Group controlId="formLastName">
-                  <Form.Label>Last Name</Form.Label>
-                  <Form.Control type="text" placeholder="Enter your last name" />
-                </Form.Group>
-              </Col>
-            </Row>
+        <Form onSubmit={handleSubmit}>
+          <Modal.Header closeButton>
+            <Modal.Title>{modalTitle}</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+                <Row className='pb-3'>
+                  <Col md={6}>
+                    <Form.Group controlId="formFirstName">
+                      <Form.Label>First Name</Form.Label>
+                      <Form.Control type="text" name="firstName" placeholder="Enter your first name" value={formData.firstName} onChange={handleChange} />
+                    </Form.Group>
+                  </Col>
+                  <Col md={6}>
+                    <Form.Group controlId="formLastName">
+                      <Form.Label>Last Name</Form.Label>
+                      <Form.Control type="text" name="lastName" placeholder="Enter your last name" value={formData.lastName} onChange={handleChange} />
+                    </Form.Group>
+                  </Col>
+                </Row>
 
-            <Row className='pb-3'>
-              <Col md={6}>
-                <Form.Group controlId="formPhoneNumber">
-                  <Form.Label>Phone Number</Form.Label>
-                  <Form.Control type="text" placeholder="Enter your phone number" />
-                </Form.Group>
-              </Col>
-              <Col md={6}>
-                <Form.Group controlId="formEmail">
-                  <Form.Label>Email</Form.Label>
-                  <Form.Control type="email" placeholder="Enter your email" required />
-                </Form.Group>
-              </Col>
-            </Row>
+                <Row className='pb-3'>
+                  <Col md={6}>
+                    <Form.Group controlId="formPhoneNumber">
+                      <Form.Label>Phone Number</Form.Label>
+                      <Form.Control type="text" name="phoneNumber" placeholder="Enter your phone number" value={formData.phoneNumber} onChange={handleChange} />
+                    </Form.Group>
+                  </Col>
+                  <Col md={6}>
+                    <Form.Group controlId="formEmail">
+                      <Form.Label>Email</Form.Label>
+                      <Form.Control type="email" name="email" placeholder="Enter your email" value={formData.email} onChange={handleChange} required />
+                    </Form.Group>
+                  </Col>
+                </Row>
 
-            <Row className='pb-3'>
-              <Col md={6}>
-                <Form.Group controlId="formCompany">
-                  <Form.Label>Company</Form.Label>
-                  <Form.Control type="text" placeholder="Enter your company name" />
-                </Form.Group>
-              </Col>
-              <Col md={6}>
-                <Form.Group controlId="formStreetAddress">
-                  <Form.Label>Street Address</Form.Label>
-                  <Form.Control type="text" placeholder="Enter your street address" required />
-                </Form.Group>
-              </Col>
-            </Row>
+                <Row className='pb-3'>
+                  <Col md={6}>
+                    <Form.Group controlId="formCompany">
+                      <Form.Label>Company</Form.Label>
+                      <Form.Control type="text" name="company" placeholder="Enter your company name" value={formData.company} onChange={handleChange} />
+                    </Form.Group>
+                  </Col>
+                  <Col md={6}>
+                    <Form.Group controlId="formStreetAddress">
+                      <Form.Label>Street Address</Form.Label>
+                      <Form.Control type="text" name="streetAddress" placeholder="Enter your street address" value={formData.streetAddress} onChange={handleChange} required />
+                    </Form.Group>
+                  </Col>
+                </Row>
 
-            <Row className='pb-3'>
-              <Col md={6}>
-                <Form.Group controlId="formCountry">
-                  <Form.Label>Country</Form.Label>
-                  <Form.Select value={country} onChange={handleCountryChange}>
-                    <option value="">—Please choose a country—</option>
-                    <option value="USA">United States</option>
-                    <option value="Mexico">Mexico</option>
-                  </Form.Select>
-                </Form.Group>
-              </Col>
-              <Col md={6}>
-                <Form.Group controlId="formState">
-                  <Form.Label>State</Form.Label>
-                  <Form.Select disabled={!stateOptions.length}>
-                    <option value="" disabled>—Please choose a state—</option>
-                    {stateOptions.map((state, idx) => (
-                      <option key={idx} value={state}>{state}</option>
-                    ))}
-                  </Form.Select>
-                </Form.Group>
-              </Col>
-            </Row>
+                <Row className='pb-3'>
+                  <Col md={6}>
+                    <Form.Group controlId="formCountry">
+                      <Form.Label>Country</Form.Label>
+                      <Form.Select name="country" value={formData.country} onChange={handleCountryChange}>
+                        <option value="">—Please choose a country—</option>
+                        <option value="USA">United States</option>
+                        <option value="Mexico">Mexico</option>
+                      </Form.Select>
+                    </Form.Group>
+                  </Col>
+                  <Col md={6}>
+                    <Form.Group controlId="formState">
+                      <Form.Label>State</Form.Label>
+                      <Form.Select name="state" value={formData.state} onChange={handleChange} disabled={!stateOptions.length}>
+                        <option value="" disabled>—Please choose a state—</option>
+                        {stateOptions.map((state, idx) => (
+                          <option key={idx} value={state}>{state}</option>
+                        ))}
+                      </Form.Select>
+                    </Form.Group>
+                  </Col>
+                </Row>
 
-            <Row className='pb-3'>
-              <Col md={6}>
-                <Form.Group controlId="formCity">
-                  <Form.Label>City</Form.Label>
-                  <Form.Control type="text" placeholder="Enter your city" />
-                </Form.Group>
-              </Col>
-              <Col md={6}>
-                <Form.Group controlId="formZipCode">
-                  <Form.Label>Zip Code</Form.Label>
-                  <Form.Control type="text" placeholder="Enter your zip code" required />
-                </Form.Group>
-              </Col>
-            </Row>           
+                <Row className='pb-3'>
+                  <Col md={6}>
+                    <Form.Group controlId="formCity">
+                      <Form.Label>City</Form.Label>
+                      <Form.Control type="text" name="city" placeholder="Enter your city" value={formData.city} onChange={handleChange} />
+                    </Form.Group>
+                  </Col>
+                  <Col md={6}>
+                    <Form.Group controlId="formZipCode">
+                      <Form.Label>Zip Code</Form.Label>
+                      <Form.Control type="text" name="zipCode" placeholder="Enter your zip code" value={formData.zipCode} onChange={handleChange} required />
+                    </Form.Group>
+                  </Col>
+                </Row>
 
-            <Form.Group controlId="formNewsletter" className='pb-3'>
-              <Form.Check type="checkbox" label="Sign up for newsletter" />
-            </Form.Group>
+                <Form.Group controlId="formMessage">
+                  <Form.Label>Message</Form.Label>
+                  <Form.Control
+                    as="textarea"
+                    rows={3}
+                    name="message"
+                    placeholder="Enter your message"
+                    value={modalMessage}
+                    onChange={(e) => setModalMessage(e.target.value)}
+                    style={{ height: 180 }}
+                  />
+                </Form.Group>
 
-            <Form.Group controlId="formMessage">
-              <Form.Label>Message</Form.Label>
-              <Form.Control as="textarea" rows={3} required value={modalMessage} style={{height: 180}}/>
-            </Form.Group>
-          </Form>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={handleCloseModal}>Close</Button>
-          <Button variant="primary">Submit</Button>
-        </Modal.Footer>
+                
+          </Modal.Body>
+          <Modal.Footer>
+                  <Button variant="secondary" onClick={handleCloseModal}>Close</Button>
+                  <Button variant="primary" type="submit">Submit</Button>
+          </Modal.Footer>
+        </Form>
       </Modal>
       <Footer />
     </div>

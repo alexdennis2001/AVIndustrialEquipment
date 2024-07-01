@@ -2,6 +2,7 @@ import axios from 'axios';
 
 // Create an Axios instance
 const api = axios.create({
+  // baseURL: 'http://localhost:5278',
   baseURL: 'https://avindustrialequipment.com',
   headers: {
     'Content-Type': 'application/json',

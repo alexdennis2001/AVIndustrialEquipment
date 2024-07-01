@@ -36,6 +36,20 @@ function ByBrand() {
   const [modalMessage, setModalMessage] = useState("");
   const [modalTitle, setModalTitle] = useState("");
 
+  const [formData, setFormData] = useState({
+    firstName: '',
+    lastName: '',
+    phoneNumber: '',
+    email: '',
+    company: '',
+    streetAddress: '',
+    country: '',
+    state: '',
+    city: '',
+    zipCode: '',
+    message: ''
+  });
+
   const handleCloseOffcanvas = () => setShowOffcanvas(false);
   const handleCloseModal = () => setShowModal(false);
   const handleShowModal = (product, message, title) => {
@@ -80,15 +94,33 @@ function ByBrand() {
   
 Stock number: ${product.stock_num}`;
 
-  const [country, setCountry] = useState('');
   const [stateOptions, setStateOptions] = useState([]);
 
   const handleCountryChange = (event) => {
     const selectedCountry = event.target.value;
-    setCountry(selectedCountry);
+    setFormData({ ...formData, country: selectedCountry });
     setStateOptions(states[selectedCountry] || []);
   };
 
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const updatedFormData = { ...formData, message: modalMessage };
+    try {
+      const response = await api.post('/api/Contact/send-email', updatedFormData);
+      console.log(response.data);
+      alert('Email sent successfully');
+      handleCloseModal();
+    } catch (error) {
+      console.error('Error sending email:', error);
+      alert('Failed to send email');
+    }
+  };
+  
   const brands = [ 
       "3M", "AALADIN", "ABB", "ABELL-HOWE", "ACCO", "ACCO WRIGHT", "ACCRA WIRE", "ACCU", "ACCURPRESS", "ACCURSHEAR", "ACE", "ACECO", "ACER", "ACL", "ACME", "ACRA", "ADDISON", "ADIRA", "ADVANCED", "ADVANCED MACHINE", "ADVANTAGE", "AEF", "AEM", "AEM/TIMESAVER", "AER CONTROL SYSTEMS", "AES", "AGET", "AGM", "AIDA", "AIR FEED INC.", "Air Ram", "AIR TECHNOLOGY SYSTEMS", "AIRAM", "AJAX", "AJAX ELECTRIC", "AJAX TOCCO", "AKER WADE", "AKYAPAK", "ALDONEX", "ALLEGHENY", "ALLEN", "ALLIANT", "ALLSTEEL", "ALLTRONICS", "ALM", "ALMCO", "ALNOR", "ALORIS", "ALPHA", "ALPHIL", "ALPINE", "AMADA", "AMD", "American", "AMERICAN INDUCTION", "AMERICAN LIFTS", "AMERICAN MSI", "American Pacemaker", "AMERICAN STEEL", "AMERICAN STEEL LINE", "AMET", "AMP", "AMT", "ANCHOR", "ANDERSON", "ANGOR", "ANJO", "ANVER", "APEX", "APPLETON", "APPLIED RECOVERY SYSTEMS", "APT", "ARBOR", "ARCO WARD", "ARDCOR", "ARISTO", "ARMSTRONG", "ARO", "ARONSON", "ARTOS", "ASC", "ASHLAND", "ASQUITH", "ATLANTIC", "ATLAS", "ATLAS COPCO", "AUTOMATIC FEED", "AUTOQUIP", "AVEY", "AWC", "AWS", "AXELSON", "AZIMUTH", "B & K", "BAC", "BAILEIGH", "BAIRD MACHINE", "BALANCE TECHNOLOGY", "BALEMASTER", "BANNER", "BARBER COLMAN", "BARNES", "BARRETT", "BAY CAST", "BCP", "BEATTY", "BECKER PUMPS", "BEHRINGER", "BELLISS & MORCOM", "BENCHMASTER", "BENDIX", "BENNETT", "BERRY INDUSTRIES", "BERTHIEZ", "BERTRAM", "BERTSCH", "BESLY", "BETENBENDER", "BETTER ENGINEERING", "BETTERMAN", "BETTS", "BINNS & BERRY", "BIRMINGHAM", "BISHAMON", "BISON", "BLANCHARD", "BLISS", "BLM", "BLUE LINE", "BLUE M", "BLUE VALLEY", "BOBCAT", "BOMAR", "BOSCH SURFTRAN", "BOSCHERT", "BOWERS", "BRADBURY", "BRADLEY", "BRATTAN", "BRIDGEPORT", "BRONX", "BROWN & BOGGS", "BROWN & SHARPE", "BRUDERER", "B-TEK", "BTM SAWS", "BUCKEYE", "BUDGIT", "BUFFALO", "BULLARD", "BURR BENCH", "BURR OAK", "BURRMASTER", "BUSHMAN", "BUTECH BLISS", "C & M", "C.M.", "CADY LIFTERS", "CALDWELL", "CANTON", "CARLSTAHL CRAFTSMAN", "CARLTON", "CARSON ENGINEERING", "CART CADDY", "CASCADE", "CASTEX", "CAT", "CATERPILLAR", "CECO", "CECOR", "CENTAURO", "CENTRAL MACHINERY", "CENTRO METALCUT", "C-F", "CFM", "CHALLENGER ELECTRICAL EQUIPMENT", "CHALLENGER LIFTS", "CHAMBERSBURG", "CHASE-LOGEMAN", "CHERRY", "CHESTER", "CHEVALIER", "CHEVROLET", "CHICAGO", "CHICAGO DREIS & KRUMP", "CHIYODA", "Cincinnati", "CINCINNATI BICKFORD", "CINCINNATI FAN", "CINCINNATI HYPRO", "CINCINNATI INC", "CINCINNATI MACHINES", "CINCINNATI MILACRON", "CINCINNATI MILACRON HEALD", "CLARK", "CLAUSING", "CLAUSING COLCHESTER", "CLAUSING KONDIA", "CLAUSING METOSA", "CLAUSING NARDINI", "CLEARING", "CLEARING NIAGARA", "CLEEREMAN", "CLEMCO", "CLEVELAND", "CLEVELAND TWIST DRILL", "CLIFTON", "CM", "CM LODESTAR", "COBALT", "COE", "COFFING", "COILMATIC", "COLLINS MICROFLAT", "COLLIS", "COLT", "COMACA", "COMPAIR", "CONCO", "CONRAC", "CONTROLLED AUTOMATION", "CONTROLLED POWER", "CONTRX", "CONWAY", "COOPER WEYMOUTH", "CORSTEEL", "COSEN", "COUTH", "CP MFG", "CRAFTSMAN", "CRAM-A-LOT", "CREST ULTRASONIC", "CROWN", "CSEPEL", "CSM", "CULLEN FRIESTEDT", "CUMBERLAND", "CUSHMAN", "CUSTOM", "CUTLER HAMMER", "CWP", "D.C. MORRISON", "DAEWOO", "DAH LIH", "DAHLSTROM", "DAITO", "DAKE", "DAKE MEP", "DALCOS", "DALLAS", "DANLY", "DARBERT", "DAVENPORT", "DAVEY", "DAVI", "DAYTON", "DE LAVAL", "Decapador", "DEFIANCE", "DELTA", "DEMAG", "DENGENSHA", "DENISON", "DENISON MULTIPRESS", "DENYO KOGYO", "DETROIT", "DEVAIR", "DEWALT", "DIACRO", "DIAMOND", "DICKERMAN", "DIGIT", "DILLON", "DIMECO ALIPRESSE", "DIMETRICS", "DIVINE", "DMG MORI", "DMK", "DOALL", "DOALL ROMI", "DODGE", "DONALDSON", "DONALDSON TORIT", "DOOSAN", "DORIAN TOOL", "DOVER", "DREISTERN", "DRI-AIR", "DTI", "DUFF NORTON", "DUNNAGE", "DURANT", "DURMA", "DUST CONTROL", "DUST HOG", "DYNAMIC AIR", "DYNAMIC FEEDS", "E.H. WACHS", "EAGLE", "EASTEY", "EASTMAN", "EATON", "EATON LEONARD", "ECONOLINE", "EDWARDS", "EGAN", "EITEL", "ELB", "ELGIN", "ELM SYSTEMS", "EMI", "ENCO", "ENERPAC", "ENGEL", "ENSHU", "ENTERPRISE", "ENVIRO-PAK", "ENVIROTRONICS", "ERIE", "ERIEZ MAGNETICS", "ESAB", "EUBANKS", "EVANS", "EVAPCO", "EVERETT", "EXCEL", "EXCELLO", "EXTRUDE HONE", "FABRILINE", "FACCIN", "FALK", "FALLS", "FAMCO", "FANUC", "FARO", "FARR", "FARREL", "FASTENER ENGINEERS", "FASTI", "FEDERAL", "FEDERAL PACIFIC", "FEED LEASE", "FELDMAN", "FELLOWS", "FENN", "FH", "FICEP", "FIDIA", "FILTER 1", "FIM", "FINNSONIC", "FLOW", "FMB", "FORD", "FORSTNER", "FORTE", "FORTUNE", "FOSDICK", "FOSTORIA", "FOUR CORP", "FRANKLIN", "FRITZ WERNER", "FRONIUS", "FRORIEP", "G & L", "G&E", "G&P", "GAFFEY", "GALAXY", "GALBREATH", "GARDNER", "GARDNER DENVER", "GARY", "GATTI", "GAUER", "GE SCHMIDT", "GEKA", "GEMINIS", "GENERAL AIR", "GENERAL BATTERY CHARGER", "GENERAL ELECTRIC", "GENIE", "GIDDINGS & LEWIS", "GIDDINGS & LEWIS BICKFORD", "GIDDINGS & LEWIS FRASER", "GIORIA", "GISHOLT", "GLEASON", "GLEBAR", "GLOBE TUMBLER", "GLUCO", "GMC", "GOFF", "GOLDSPRING", "GORBEL", "GOULD", "GOULD & EBERHARDT", "GPI", "GRANITE", "GREAT LAKES", "GREAT WALL", "GREENARD", "GREENLEE", "GRENEN", "GRIEVE", "GRIZZLY", "GROB", "GROTNES", "GRUENDLER", "GSW", "GUIDETTI", "GULLCO", "GUTMANN", "GUYSON", "HAAS", "HACK", "HAEUSLER", "HAMILTON", "HAMMOND", "HAMMOND POWER SOLUTIONS", "HAMMOND ROTO-FINISH", "HANKISON", "HANNIFIN", "HARDINGE", "HARIG", "HARLEY", "HARMONY", "HARRINGTON", "HAUSER", "HAUTAU", "HAVEN", "HE&M", "HEALD", "HEAT SEAL", "HEATING INDUCTION SERVICES", "HEIAN", "HEIM", "HEINRICH", "HELLER", "HEM", "HERCULES", "HERCULES AJAX", "HERMAN SCHWABE", "HERR VOSS", "HEVI DUTY", "HGG", "HI VAC", "HIGHLIGHT INDUSTRIES", "HILL-ACME", "HILTI", "HINES", "HITACHI", "HITRAN", "HI-VAC", "HMTW", "HOBART", "HOFFMANN", "HPM", "HTC", "HTC HYDRA-TOOL", "HTF", "HTI ENGINEERING", "HUESTIS", "HURCO", "HURRICANE", "HURST", "HUSKY", "HUTH", "HWACHEON", "HYDMECH", "HYD-MECH", "HYDRO TEK", "HYDROSCALE", "HYPERTHERM", "HYSTER", "HYTROL", "I2S", "I2S INTEGRATED INDUSTRIAL SYSTEMS", "IDEAL STITCHER", "IDEX", "IKEDA", "IMCAR", "IMPERIAL", "IMS", "INDUCTOHEAT", "INDUSTRIAL", "INGAR", "INGERSOLL-RAND", "INTERLAKE", "IOWA PRECISION", "IPS", "IRCO AUTOMATION", "IZPE", "JACO", "JACOBS", "JAYBIRD", "JENFAB", "JET", "JET EDGE", "JETLINE", "JLG", "JMT", "JOHN DEERE", "JOHN DUSENBERY", "JOHNFORD", "JONES & LAMSON", "JONES & SHIPMAN", "JORNS AG", "JOYCE CRIDLAND", "K & T", "KAESER", "KALAMAZOO", "KANE & ROACH", "KARCHER", "KASTO", "KAUKAUNA", "KEARNEY & TRECKER", "KECKLEY", "KEINS", "KEIYO", "KENT", "KERRY", "KIA SEIKI", "KIKINDA", "KINEFAC", "KINGSLAND", "KINGSWAY", "KJELLBERG", "KLING", "KMF", "KNAACK", "KNUDSON", "KNUTH", "KOEPFER", "KOIKE ARONSON", "KOMATSU", "KONE", "KONECRANES", "KRANCO", "KRB", "KUNDEL", "KURT", "L & J", "L&J", "LAGUN", "LAKE ERIE", "LAKE SHORE TABLES", "LAMINA", "LANDA", "LANDIS", "LANSING", "LASCO", "LEADWELL", "LEBLOND", "LEBLOND REGAL", "LEITZ", "LEPEL", "LEROI", "LEWCO", "LEWIS", "LEXAIR", "LIAN FENG", "LIBERTY", "LIBURDI DIMETRICS", "LIEBHERR", "LIFT COMPANY", "LINCOLN", "LINCOLN ELECTRIC", "LINDBERG", "LITTELL", "LNS", "LOCKFORMER", "LODGE & SHIPLEY", "LOOPCO", "LUBOW", "LUCAS", "LVD", "LYNDEX NIKKEN", "LYON", "MACHINE CONCEPTS", "MACRODYNE", "MAGNAFLUX", "MAGNATECH", "MAKINO", "MANCHESTER", "MANNOR", "MANSAVER", "MANVILLE", "MARATHON", "MAR-BEL", "MARCO", "MARCUS", "MAREN", "MARQUETTE", "MARVEL", "MASTER CHEMICAL", "MASTER MACHINE", "MATTISON", "MAXIMIZER", "MAX-O", "MAX-PAK", "MAYPRESS", "MAZAK", "MCKAY", "MCKEE", "MEASUREMENT SYSTEMS", "MECON", "MEDART", "MEDINA", "MEECO", "MEMCO", "MERCURY", "MESSER", "METAL MECHANICS", "MEUSER", "MG AMERICA", "MGM", "MICROCUT", "MIDWEST", "MIDWEST AUTOMATION", "MILLER", "MILLTRONICS", "MILWAUKEE", "MINSTER", "MINUTEMAN", "MISSLER", "MITCHELL", "MITSUBISHI", "MITSUBISHI ELECTRIC", "MITSUBISHI FORKLIFT", "MITSUI", "MITTS & MERRILL", "MITUTOYO", "MIYANO", "MODERN", "MODERN HYDRAULIC CORP", "MOHAWK", "MONARCH", "MONTGOMERY", "MORI", "MORRISON COMPANY", "MORSE", "MORSE CUTTING TOOLS", "MOSSBERG", "MOTIVATION", "MOTOMAN", "MSI", "MTC", "MUBEA", "MULTIPRESS", "MULTIVAC", "NACHI", "NARDINI", "NATCO", "National", "NATIONAL MAXIPRESS", "NEW HOLLAND", "NEW LONDON", "NEWBURY", "NIAGARA", "NIKKEN", "NILES", "NILFISK ADVANCE", "NILSON", "NISSAN", "NISSEI", "NOBLES", "NOMURA", "NORDSON", "NORTH AMERICAN", "NORTON", "NSK", "NSS", "NUMATIC", "OAK", "OAK PRESS", "OGDEN", "OILGEAR", "OKAMOTO", "OKUNA", "OLIVER", "OMCG", "OMEGA", "OMRON", "ORBITAL SYSTEMS", "ORION", "ORWAK", "OSTER", "P & H", "P&H", "PA INDUSTRIES", "PABCO", "PACIFIC", "PANASONIC", "PANDJIRIS", "PANGBORN", "PARKER", "PARKER HANNIFIN", "PATTERSON", "PATTERSON-KELLEY", "PAXSON", "PEARSON", "PEDDINGHAUS", "PEDRAZZOLI", "PEER", "PEERLESS", "PENTALIFT", "PERFECT", "PERFECTO", "PERKINS", "PERMADUR", "PEXTO", "PFAUTER", "PHASE II", "PILLAR", "PINES", "PIONEER", "PIONEER ECLIPSE", "PIQUA", "PIRANHA", "PNEU POWR", "POLAND", "POREBA", "PORTAGE", "PORTER CABLE", "POWER TEAM", "POWERMATIC", "POWERTRAN", "PRATT & WHITNEY", "PRE DALLAS", "PRECISE", "PRECISION", "PRECISION GRANITE", "PRECISION INDUSTRIES", "PRECISION QUINCY", "PRESS ROOM EQUIPMENT", "PRESTO", "PRESTON EASTIN", "PRIMA", "PRIMELINE", "PRO GUARD", "PRO WELD", "PROCECO", "PRODUCTION", "PROFILE", "PROGRESSIVE", "PROMACUT", "PRO-NOTCH", "PROSERV", "PROTEM", "PROTO-1", "PTR", "PULLMAX", "PUTNAM", "PYROMAITRE", "Q-FOG", "QUANTUM", "QUINCY", "RADIAC ABRASIVES", "RADIUS", "RAFTER", "RAHN", "RAMCO SANDERS", "RANGER", "RANSOHOFF", "RANSOME", "RAPID AIR", "RAS", "RAYTECH", "RBI", "RED BUD", "REED", "REGAL", "REISHAUER", "RENEGADE", "REPUBLIC", "REVOLATOR", "RICE LAKE", "RICHARDS", "RIDGID", "RIFA", "RMG", "RMS", "ROACH", "ROBBINS & MYERS", "ROBOTOOL", "ROBOVENT", "ROCKFORD", "ROD CHOMPER", "RODGERS", "ROFIN", "ROFIN LASAG", "ROMI", "ROSEMONT", "ROSLER", "ROTARY", "ROTO DIE", "ROTO-FINISH", "ROUNDO", "ROURA", "ROUSELLE PRESS", "ROUSSELLE", "ROWE", "ROYAL", "ROYAL MASTER", "ROYALTON", "ROYSON", "RUESCH", "RUF", "RUSH", "RYAZAN", "RYMAN", "SACK & KIESSELBACH", "SAFAN", "SALA", "SAMPUTENSILI", "SANDVIK", "SANYO DENKI", "SATEC SYSTEMS", "SAVAGE", "SAVAGE SAWS", "SCHIESS FRORIEP", "SCHLEBACH", "SCHMIDT", "SCHUNK", "SCHUSTER", "SCIAKY", "SCOTCHMAN", "SCOTSMAN", "SCS", "SEFAC LIFT & EQUIPMENT", "SELCO", "SELMA", "SENTRY EQUIPMENT", "SERTOM", "SERVICE", "SERVO", "SESCO", "SETCO", "SHAANXI", "SHARP", "SHAW", "SHEET METAL MEN", "SHELDON", "SHIBAURA", "SHIGIYA", "SHUSTER", "SIDNEY", "SIEMENS", "SIGMA MACHINERY", "SIGNODE", "SIMASV", "SIMONDS", "SINTOBRATOR", "SIRCO", "SMART", "SMC", "SMEC", "SMERAL", "SMS HASENCLEVER", "SMTW", "SOCO", "SORGEL", "SOUTH BEND", "SOUTH BEND JOHNSON", "SOUTHWESTERN INDUSTRIES", "SOUTHWORTH", "SPANCO", "SPANG", "SPARTAN", "SPRINGFIELD", "SPX", "SQUARE D", "STAHL", "STAHL CRANE SYSTEMS", "STAMTEC", "STANAT", "STANCO", "STANDARD INDUSTRIAL", "STANLEY", "STANLEY BOSTITCH", "STANLEY VIDMAR", "STARRETT", "STARTRITE", "STEEL STORAGE SYSTEMS", "STEELE", "STEELTRAK", "STEELWELD", "STEINWEG", "STERLING", "STERLING HVAC", "STERTIL KONI", "STEWART SYSTEMS", "STONE", "STORCH", "STORM VULCAN", "STREET", "STRIPPIT", "STUDER", "STUHR", "SULLAIR", "SUMMIT", "SUNDSTRAND", "SUNNEN", "SUPERMAX", "SUPERTEC", "SUTTON", "SWECO", "SWI", "SYNERGY", "SYSTEM TECHNOLOGIES", "T & H", "TAIHE(TAH)", "TANNEWITZ", "TARNOW", "TAURING", "TAYLOR", "TAYLOR DUNN", "TAYLOR WINFIELD", "TCM", "T-DRILL", "TEAM", "TECHNITRON", "TENNANT", "TENNSMITH", "THEMAC", "THERMAL DYNAMICS", "THERMATRON", "THERMOTRON", "THERN", "THOMPSON", "TILT-LOCK", "TIMEMASTER", "TIMESAVERS", "TISHKEN", "TITAN", "TOCCO", "TOLEDO", "TOLEDO SCALE", "TONGTAI", "TORIN", "TORIT", "TORO", "TORRINGTON", "TOS", "Toshiba", "TOSHIBA SHIBAURA", "TOYOTA", "TPI", "TRACKMOBILE", "TREE", "TRENNJAEGER", "TRIAD", "TRIANGLE", "TRIUMPH", "TROYKE", "TRUMPF", "TRUMPH WAFIOS", "TRU-STONE", "TSI", "TSUGAMI", "Turbo", "TURNER", "U.S. BAIRD", "ULINE", "ULTRA GRIP INTL", "ULTRA KOOL", "ULTRAMATIC", "UNICO", "UNION", "UNIPUNCH", "UNITED AIR SPECIALISTS", "UNIVAC", "UNIVERSAL", "UNKNOWN", "US INDUSTRIAL", "USI", "UTE", "UTILITY", "V&O", "VAC-U-MAX", "VALDARNO", "VALENITE", "VAN NORMAN", "VAN STEENBURGH", "VANGUARD", "VANTAGE", "VARGUS", "VAUGHN", "VERNON TOOL", "VERSON", "VERSON WHEELON", "VESTIL", "VIBRA", "VIBRO DYNAMIC", "VICTAULIC", "VICTOR", "VIKING", "VOLVO", "VOORTMAN", "Voss", "VULCAN", "W.A. WHITNEY", "W.F. WELLS", "WAGNER", "WALKER", "WALL COLMUNOY", "WALLACE", "WALLACE COAST", "WALLNER", "WALSH", "WALTER", "WARD", "WARDCRAFT", "WARNER", "WARNER & SWASEY", "WASINO", "WATERBURY", "WATERBURY FARREL", "WATLOW", "WATSON STILLMAN", "WAUSEON", "WDM", "WEAN", "WEBB", "WEBER", "WEBSTER & BENNETT", "WEIGH-TRONIX", "WELD ENGINEERING", "WELDWIRE", "WELLS", "WELLSAW", "WELTY WAY", "WESCO", "WEST BEND", "WESTINGHOUSE", "WHEELABRATOR", "WHITE", "WHITING", "WHITNEY", "WHITNEY JENSEN", "WILLIAMS", "WILLIAMS & WHITE", "WILLIS", "WILSON", "WILSON TUKON", "WISCONSIN OVEN", "WMW", "WOOD", "WORTHINGTON", "WOTAN", "WRIGHT", "WTC", "WYSONG", "WYSONG & MILES", "YALE", "YAM", "YIFANG", "YODER", "YUASA", "ZEISS", "ZEP", "ZERO", "ZOLLER"
   ];
@@ -129,7 +161,7 @@ Stock number: ${product.stock_num}`;
                   </Card.Body>
                   <Card.Footer >
                     <Row className='g-2'>
-                      <Button variant="success" onClick={() => handleShowModal(item, `I'd like to make an offer of:\n\n${predefinedMessage(item)}`, "Make an Offer")}>MAKE AN OFFER</Button>
+                      <Button variant="success" onClick={() => handleShowModal(item, `I'd like to make an offer of: $0.00\n\n${predefinedMessage(item)}`, "Make an Offer")}>MAKE AN OFFER</Button>
                       <Button variant="outline-warning" onClick={() => handleShowModal(item, predefinedMessage(item), "Request a Quote")} style={{color: 'black'}}>Request Quote</Button>
                       <Button onClick={() => handleShowOffcanvas(item.stock_num)} variant="primary">View Details</Button>
                     </Row>
@@ -174,7 +206,7 @@ Stock number: ${product.stock_num}`;
                 </Card.Body>
                 <Card.Footer>
                   <Row className='g-1'>
-                    <Button variant="success" onClick={() => handleShowModal(selectedProduct, `I'd like to make an offer of:\n\n${predefinedMessage(selectedProduct)}`, "Make an Offer")}>MAKE AN OFFER</Button>
+                    <Button variant="success" onClick={() => handleShowModal(selectedProduct, `I'd like to make an offer of: $0.00\n\n${predefinedMessage(selectedProduct)}`, "Make an Offer")}>MAKE AN OFFER</Button>
                     <Button variant="outline-warning" onClick={() => handleShowModal(selectedProduct, predefinedMessage(selectedProduct), "Request a Quote")} style={{color: 'black'}}>Request Quote</Button>
                   </Row>
                 </Card.Footer>
@@ -185,109 +217,115 @@ Stock number: ${product.stock_num}`;
       </Offcanvas>
 
       <Modal show={showModal} onHide={handleCloseModal}>
-        <Modal.Header closeButton>
-          <Modal.Title>{modalTitle}</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <Form>
-            <Row className='pb-3'>
-              <Col md={6}>
-                <Form.Group controlId="formFirstName">
-                  <Form.Label>First Name</Form.Label>
-                  <Form.Control type="text" placeholder="Enter your first name" />
-                </Form.Group>
-              </Col>
-              <Col md={6}>
-                <Form.Group controlId="formLastName">
-                  <Form.Label>Last Name</Form.Label>
-                  <Form.Control type="text" placeholder="Enter your last name" />
-                </Form.Group>
-              </Col>
-            </Row>
+        <Form onSubmit={handleSubmit}>
+          <Modal.Header closeButton>
+            <Modal.Title>{modalTitle}</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+                <Row className='pb-3'>
+                  <Col md={6}>
+                    <Form.Group controlId="formFirstName">
+                      <Form.Label>First Name</Form.Label>
+                      <Form.Control type="text" name="firstName" placeholder="Enter your first name" value={formData.firstName} onChange={handleChange} />
+                    </Form.Group>
+                  </Col>
+                  <Col md={6}>
+                    <Form.Group controlId="formLastName">
+                      <Form.Label>Last Name</Form.Label>
+                      <Form.Control type="text" name="lastName" placeholder="Enter your last name" value={formData.lastName} onChange={handleChange} />
+                    </Form.Group>
+                  </Col>
+                </Row>
 
-            <Row className='pb-3'>
-              <Col md={6}>
-                <Form.Group controlId="formPhoneNumber">
-                  <Form.Label>Phone Number</Form.Label>
-                  <Form.Control type="text" placeholder="Enter your phone number" />
-                </Form.Group>
-              </Col>
-              <Col md={6}>
-                <Form.Group controlId="formEmail">
-                  <Form.Label>Email</Form.Label>
-                  <Form.Control type="email" placeholder="Enter your email" required />
-                </Form.Group>
-              </Col>
-            </Row>
+                <Row className='pb-3'>
+                  <Col md={6}>
+                    <Form.Group controlId="formPhoneNumber">
+                      <Form.Label>Phone Number</Form.Label>
+                      <Form.Control type="text" name="phoneNumber" placeholder="Enter your phone number" value={formData.phoneNumber} onChange={handleChange} />
+                    </Form.Group>
+                  </Col>
+                  <Col md={6}>
+                    <Form.Group controlId="formEmail">
+                      <Form.Label>Email</Form.Label>
+                      <Form.Control type="email" name="email" placeholder="Enter your email" value={formData.email} onChange={handleChange} required />
+                    </Form.Group>
+                  </Col>
+                </Row>
 
-            <Row className='pb-3'>
-              <Col md={6}>
-                <Form.Group controlId="formCompany">
-                  <Form.Label>Company</Form.Label>
-                  <Form.Control type="text" placeholder="Enter your company name" />
-                </Form.Group>
-              </Col>
-              <Col md={6}>
-                <Form.Group controlId="formStreetAddress">
-                  <Form.Label>Street Address</Form.Label>
-                  <Form.Control type="text" placeholder="Enter your street address" required />
-                </Form.Group>
-              </Col>
-            </Row>
+                <Row className='pb-3'>
+                  <Col md={6}>
+                    <Form.Group controlId="formCompany">
+                      <Form.Label>Company</Form.Label>
+                      <Form.Control type="text" name="company" placeholder="Enter your company name" value={formData.company} onChange={handleChange} />
+                    </Form.Group>
+                  </Col>
+                  <Col md={6}>
+                    <Form.Group controlId="formStreetAddress">
+                      <Form.Label>Street Address</Form.Label>
+                      <Form.Control type="text" name="streetAddress" placeholder="Enter your street address" value={formData.streetAddress} onChange={handleChange} required />
+                    </Form.Group>
+                  </Col>
+                </Row>
 
-            <Row className='pb-3'>
-              <Col md={6}>
-                <Form.Group controlId="formCountry">
-                  <Form.Label>Country</Form.Label>
-                  <Form.Select value={country} onChange={handleCountryChange}>
-                    <option value="">—Please choose a country—</option>
-                    <option value="USA">United States</option>
-                    <option value="Mexico">Mexico</option>
-                  </Form.Select>
-                </Form.Group>
-              </Col>
-              <Col md={6}>
-                <Form.Group controlId="formState">
-                  <Form.Label>State</Form.Label>
-                  <Form.Select disabled={!stateOptions.length}>
-                    <option value="" disabled>—Please choose a state—</option>
-                    {stateOptions.map((state, idx) => (
-                      <option key={idx} value={state}>{state}</option>
-                    ))}
-                  </Form.Select>
-                </Form.Group>
-              </Col>
-            </Row>
+                <Row className='pb-3'>
+                  <Col md={6}>
+                    <Form.Group controlId="formCountry">
+                      <Form.Label>Country</Form.Label>
+                      <Form.Select name="country" value={formData.country} onChange={handleCountryChange}>
+                        <option value="">—Please choose a country—</option>
+                        <option value="USA">United States</option>
+                        <option value="Mexico">Mexico</option>
+                      </Form.Select>
+                    </Form.Group>
+                  </Col>
+                  <Col md={6}>
+                    <Form.Group controlId="formState">
+                      <Form.Label>State</Form.Label>
+                      <Form.Select name="state" value={formData.state} onChange={handleChange} disabled={!stateOptions.length}>
+                        <option value="" disabled>—Please choose a state—</option>
+                        {stateOptions.map((state, idx) => (
+                          <option key={idx} value={state}>{state}</option>
+                        ))}
+                      </Form.Select>
+                    </Form.Group>
+                  </Col>
+                </Row>
 
-            <Row className='pb-3'>
-              <Col md={6}>
-                <Form.Group controlId="formCity">
-                  <Form.Label>City</Form.Label>
-                  <Form.Control type="text" placeholder="Enter your city" />
-                </Form.Group>
-              </Col>
-              <Col md={6}>
-                <Form.Group controlId="formZipCode">
-                  <Form.Label>Zip Code</Form.Label>
-                  <Form.Control type="text" placeholder="Enter your zip code" required />
-                </Form.Group>
-              </Col>
-            </Row>           
+                <Row className='pb-3'>
+                  <Col md={6}>
+                    <Form.Group controlId="formCity">
+                      <Form.Label>City</Form.Label>
+                      <Form.Control type="text" name="city" placeholder="Enter your city" value={formData.city} onChange={handleChange} />
+                    </Form.Group>
+                  </Col>
+                  <Col md={6}>
+                    <Form.Group controlId="formZipCode">
+                      <Form.Label>Zip Code</Form.Label>
+                      <Form.Control type="text" name="zipCode" placeholder="Enter your zip code" value={formData.zipCode} onChange={handleChange} required />
+                    </Form.Group>
+                  </Col>
+                </Row>
 
-            <Form.Group controlId="formNewsletter" className='pb-3'>
-              <Form.Check type="checkbox" label="Sign up for newsletter" />
-            </Form.Group>
+                <Form.Group controlId="formMessage">
+                  <Form.Label>Message</Form.Label>
+                  <Form.Control
+                    as="textarea"
+                    rows={3}
+                    name="message"
+                    placeholder="Enter your message"
+                    value={modalMessage}
+                    onChange={(e) => setModalMessage(e.target.value)}
+                    style={{ height: 180 }}
+                  />
+                </Form.Group>
 
-            <Form.Group controlId="formMessage">
-              <Form.Label>Message</Form.Label>
-              <Form.Control as="textarea" rows={3} required value={modalMessage} style={{height: 180}}/>
-            </Form.Group>
-          </Form>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={handleCloseModal}>Close</Button>
-          <Button variant="primary">Submit</Button>
-        </Modal.Footer>
+                
+          </Modal.Body>
+          <Modal.Footer>
+                  <Button variant="secondary" onClick={handleCloseModal}>Close</Button>
+                  <Button variant="primary" type="submit">Submit</Button>
+          </Modal.Footer>
+        </Form>
       </Modal>
       <Footer />
     </div>

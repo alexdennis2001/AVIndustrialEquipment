@@ -13,7 +13,7 @@ function Header() {
         <Col xs={4}>
           <Container className='d-flex align-items-center cell-phone'>
               <TelephoneInboundFill color="white" size={24} />
-              <h5 className="ms-3 mb-0">915-258-2916</h5>
+              <h5 className="ms-3 mb-0">+1 (915) 258 2916</h5>
           </Container>
         </Col>
 
